@@ -14,12 +14,11 @@ The project has a class for every role
 3) "DataBaseCSV" class has the role of creating a table in a db if it does not exist, delete all the content if it has
    any and inserting a list of string arrays to it.
 4) "Log" class has the role of logging the csv results to a log file
-5) "DefVariables" class contains all the static links to csv's and db
 
 INVALID RECORD -an array of strings that has one or more empty strings.
 VALID RECORD - an array of strings that doesn't have any empty strings.
 
-If you want to change the link of any file then you can do it in DefVariables class
+If you want to change the link of any file then you can do it in config file 
 
 * KNOWN BUGS
 
