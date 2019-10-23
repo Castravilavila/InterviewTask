@@ -1,28 +1,49 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 public class Main {
     public static void main(String[] args) throws Exception {
 
+        Log logger;
+        ReadCsv myCsvReader;
+        WriteToCsv myCsvWriter;
+        DataBaseCSV dataBaseCSV;
+
         //Create all classes
-        Log logger = new Log(DefVariables.LOG_FILE);
-        ReadCsv myCsvReader = new ReadCsv(DefVariables.CSV_FILE_TO_READ);
-        WriteToCsv myCsvWriter = new WriteToCsv(DefVariables.CSV_FILE_TO_WRITE);
-        DataBaseCSV dataBaseCSV = new DataBaseCSV(DefVariables.DB_FILE);
+        File configFile = new File("config.properties");
+        try {
+            FileReader reader = new FileReader(configFile);
+            Properties props = new Properties();
+            props.load(reader);
 
-        //Created arraylist that will store the csv data
-        ArrayList<String[]> fullListOfRecords = myCsvReader.parseCsv();
+            logger = new Log(props.getProperty("logFile"));
+            myCsvReader = new ReadCsv(props.getProperty("csvToReadFile"));
+            myCsvWriter = new WriteToCsv(props.getProperty("csvToWriteFile"));
+            dataBaseCSV = new DataBaseCSV(props.getProperty("dbFile"));
 
-        //filtered the valid and the invalid data
-        myCsvReader.sortValidAndInvalidRows(fullListOfRecords);
+            //Created arraylist that will store the csv data
+            ArrayList<String[]> fullListOfRecords = myCsvReader.parseCsv();
 
-        //write the invalid data to a csv file
-        myCsvWriter.writeArrayToFile(myCsvReader.getInvalidRows());
+            //filtered the valid and the invalid data
+            myCsvReader.sortValidAndInvalidRows(fullListOfRecords);
 
-        //insert to a db the valid data
-        dataBaseCSV.insertListInSqlTable(myCsvReader.getValidRows());
+            //write the invalid data to a csv file
+            myCsvWriter.writeArrayToFile(myCsvReader.getInvalidRows());
 
-        //log the result to a log file
-        logger.logCsvResults(fullListOfRecords,myCsvReader.getValidRows(),myCsvReader.getInvalidRows());
+            //insert to a db the valid data
+            dataBaseCSV.insertListInSqlTable(myCsvReader.getValidRows());
 
+            //log the result to a log file
+            logger.logCsvResults(fullListOfRecords,myCsvReader.getValidRows(),myCsvReader.getInvalidRows());
+            reader.close();
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }

@@ -42,7 +42,9 @@ public class ReadCsv {
         ArrayList<String[]> finalCsvArray = new ArrayList<>();
         try (
                 Reader reader = Files.newBufferedReader(Paths.get(csvFile));
-                CSVReader csvReader = new CSVReader(reader);) {
+                CSVReader csvReader = new CSVReader(reader)
+        )
+        {
             String[] nextRecord;
             while ((nextRecord = csvReader.readNext()) != null) {
                 finalCsvArray.add(nextRecord);
