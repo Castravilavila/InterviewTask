@@ -11,24 +11,27 @@ public class DataBaseCSV {
     /**
      * This methods creats a new tablse if not present in db, clears it if it has any
      * content and inserts the argument list, it has a predefined number of 10 columns
+     * The first row of list will be the title of table
      * @param list of String arrays
      * @throws SQLException
      */
     public void insertListInSqlTable(List<String[]> list) throws SQLException{
 
         String sqlCreateTable = "CREATE TABLE IF NOT EXISTS validrecords(\n"
-                +" A text,"
-                +" B text,"
-                +" C text,"
-                +" D text,"
-                +" E text,"
-                +" F text,"
-                +" G text,"
-                +" H text,"
-                +" I text,"
-                +" J text)";
+                +" "+list.get(0)[0]+" text,"
+                +" "+list.get(0)[1]+" text,"
+                +" "+list.get(0)[2]+" text,"
+                +" "+list.get(0)[3]+" text,"
+                +" "+list.get(0)[4]+" text,"
+                +" "+list.get(0)[5]+" text,"
+                +" "+list.get(0)[6]+" text,"
+                +" "+list.get(0)[7]+" text,"
+                +" "+list.get(0)[8]+" text,"
+                +" "+list.get(0)[9]+" text)";
         String sqlInsert = "INSERT INTO validrecords(A,B,C,D,E,F,G,H,I,J) VALUES(?,?,?,?,?,?,?,?,?,?)";
         String clearTable = "DELETE FROM validrecords";
+
+        list.remove(0);
 
         Connection conn = connect();
         Statement stmt = conn.createStatement();
